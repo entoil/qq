@@ -1,0 +1,23 @@
+------------------------------------------------------------
+	QQ FEATURES
+------------------------------------------------------------
+
+* Sign Up for an account
+* Log in to control panel
+* Control Panel:
+	Create a questionnaire
+	Obtain unique questionnaire link
+	View own existing questionnaire
+	View statistics of questionnaire answers
+	Modify questionnaire
+	Delete questionnaire
+* Questions have 5 possible types
+	Yes/No
+	True/False
+	Strongly Agree - Strongly Disagree
+	Always - Never
+	Age
+	Gender
+	1 - 5 scale
+* Answer questionnaires anonymously by visiting questionnaire link
+* IP checks to minimise same participants completing same questionnaire multiple times

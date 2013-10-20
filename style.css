@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* CSS Document */
+
+header {
+	text-align: center;
+	letter-spacing: 2px;
+	height: 60px;
+	width: 450px;
+	border: 1px solid #000;
+	padding-top: 40px;
+	font-size: 14px;
+	margin: auto;
+	margin-bottom: 5px;
+	margin-top: 80px;
+}
+section {
+	min-height: 400px;
+	width: 410px;
+	border: 1px solid #000;
+	margin: auto;
+	padding: 20px;
+}
+body {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	line-height: 20px;
+	letter-spacing: 1px;
+}
+select, input { 
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	margin-left: 17px; 
+	border: solid 1px #000;
+	position: relative;
+	top: 4px;
+}
+.result {
+	border:none;
+	border-collapse:collapse;
+}
+.result td{
+	border:none;
+	line-height: 30px;
+}
+.cell {
+	width: 260px;
+}
+p a {
+	text-decoration:none;
+	color: #666;
+}
+p a:hover {
+	color: #999;
+}

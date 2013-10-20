@@ -1,0 +1,40 @@
+------------------------------------------------------------
+	DATABASE STRUCTURE
+------------------------------------------------------------
+
+users
+	Users signed up to QQ
+	| uid
+	| username
+	| password
+	| email
+
+surveys
+	Questionnaires on QQ
+	| sid
+	| uid * users
+	| name
+	| description
+	| webid
+
+questions
+	Questions of Questionnaires
+	| qid
+	| sid * surveys
+	| number
+	| question
+	| type
+
+participants
+	People who have taken questionnaires
+	| pid
+	| sid * surveys
+	| ip
+
+answers
+	| aid
+	| pid * participants
+	| qid * question
+	| type * question
+	| answer
+	| date

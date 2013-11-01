@@ -49,9 +49,9 @@ input :
 </head>
 <?php 
 
-$uniqid = $_SERVER['QUERY_STRING'];;
+$webid = $_SERVER['QUERY_STRING'];;
 
-$query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE uniqid = '" . $uniqid . "' ORDER BY number ASC;");
+$query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE webid = '" . $webid . "' ORDER BY number ASC;");
 
 $result = mysql_query($query);
 $row = mysql_fetch_array($result);
@@ -62,11 +62,11 @@ $row = mysql_fetch_array($result);
 <section>
 <?php
 
-echo "<p>" . $row['desc'] . "</p>";
+echo "<p>" . $row['description'] . "</p>";
 
 mysql_free_result($result);
 
-$query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE uniqid = '" . $uniqid . "' ORDER BY number ASC;");
+$query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE webid = '" . $webid . "' ORDER BY number ASC;");
 //$query = sprintf("SELECT E.eid AS 'Event ID', E.ename AS 'Event', E.venue AS 'Venue', E.stime AS 'Start Time', E.etime AS 'End Time', S.sname AS 'School' FROM Event E NATURAL JOIN Creates C NATURAL JOIN School S ORDER BY eid");
 
 $result = mysql_query($query);
@@ -83,14 +83,14 @@ $fields_num = mysql_num_fields($result);
 while($row = mysql_fetch_array($result))
 {
 	echo "<p>" . $row['number'] . ". " . $row['question'] . "</p>";
-	$type = $row['type'];
+	$type = $row['qtype'];
 	
 	if ($type == "tf") {
 		echo "	<input type='radio' name='tf' value='true' id='true'> <label for='true'>True</label>
 				<input type='radio' name='tf' value='false' id='false'> <label for='false'>False</label>";
 	} else if ($type == "age") {
 		echo "<select name='age' id='age'>";
-		for($i = 18; $i <= 80; $i += 1){
+		for($i = 13; $i <= 99; $i += 1){
      		echo("<option value='{$i}'>{$i}</option>");
 		}	
 		echo "</select>";
@@ -128,7 +128,7 @@ mysql_free_result($result);
 
 ?>
 
-<p>----------------------------<p>
+<!--
 
 <form>
 <p>1. What is your age?</p>
@@ -166,8 +166,8 @@ for($i = 18; $i <= 80; $i += 1){
 <input type='radio' name='agrdis' value='neutral' id='neutral'> <label for='neutral'>Neutral</label><br />
 <input type='radio' name='agrdis' value='disagree' id='disagree'> <label for='disagree'>Disagree</label><br />
 <input type='radio' name='agrdis' value='sdisagree' id='sdisagree'> <label for='sdisagree'>Strongly Disagree</label><br />
-
-<br />
+-->
+<br /><br />
 <input type='button' style='margin-left: 170px; padding: 5px;' value='Submit'/>
 <br />
 </form>

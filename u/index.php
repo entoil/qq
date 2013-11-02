@@ -8,7 +8,11 @@ include("../config.inc");
 
 <header>QQ</header>
 <section>
-
+<script type="text/javascript">
+function confirm_alert(node) {
+return confirm("Are you sure you want to delete this questionnaire?");
+}
+</script>
 <?php
 
 	echo "
@@ -52,7 +56,7 @@ include("../config.inc");
 				<a href='edit.php?" . $row['webid'] . "' title='Edit'><img src=\"../images/edit.gif\" /></a> &nbsp;
 				<a href='stats.php?" . $row['webid'] . "' title='Stats'><img src=\"../images/stat.gif\" /></a> &nbsp;
 				<a href='../q?" . $row['webid'] . "' title='View'><img src=\"../images/view.gif\" /></a> &nbsp;
-				<a href='delete.php?" . $row['webid'] . "' title='Delete'><img src=\"../images/del.gif\" /></a> &nbsp;
+				<a href='delete.php?" . $row['webid'] . "' title='Delete' onClick=\"return confirm_alert(this);\"><img src=\"../images/del.gif\" /></a> &nbsp;
 				</td>";
 				
 				echo "</tr>\n";

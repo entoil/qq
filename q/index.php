@@ -54,6 +54,7 @@ $webid = $_SERVER['QUERY_STRING'];;
 $query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE webid = '" . $webid . "' ORDER BY number ASC;");
 
 $result = mysql_query($query);
+
 $row = mysql_fetch_array($result);
 
  ?>

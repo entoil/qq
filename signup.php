@@ -1,16 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="main.css" rel="stylesheet" type="text/css" />
-</head>
 
-<body><h3>Sign-Up</h3>
-<form action="submit_signup.php" method="POST">
-First Name: <input type="text" name="first_name" size="25" maxlength="25"> <br />
-Last Name: <input type="text" name="last_name" size="25" maxlength="25"> <br />
-E-mail: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email" size="25" maxlength="25">  <br />
-<p> 
-<input type="submit">
-</body>
-</html>
+<?php
+
+include("header.php");
+
+session_start();
+if (isset($_SESSION['username'])) {	header('Location: /u'); }
+
+?>
+
+<header> QQ </header>
+
+<section>
+
+<h1>Sign Up</h1>
+
+<form action="submit_signup.php" method="POST" name="form"> 
+    <table cellspacing='0' cellpadding='4'>
+    <tr><td>Username:</td><td><input type="text" name="username" size="18" maxlength="25"></td></tr>
+    <tr><td>Password:</td><td><input type="password" name="password" size="18" maxlength="25"></td></tr>
+    <tr><td>Re-enter:</td><td><input type="password" name="password" size="18" maxlength="25"></td></tr>
+    <tr><td>E-mail:</td><td><input type="email" name="email" size="18" maxlength="25"></td></tr>
+
+    </table>
+    <br />
+   	<table>
+    <tr><td><input type="submit" value="Sign Up"></td></tr>
+    </table>
+</form><br><br>
+
+<?php include("footer.php"); ?>

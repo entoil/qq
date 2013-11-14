@@ -1,27 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
 
-<link href="main.css" rel="stylesheet" type="text/css" />
-</head>
+include("header.php");
 
-<body>
+session_start();
+if (isset($_SESSION['username'])) {	header('Location: /u'); }
+
+?>
+
+<header> QQ </header>
+
+<section>
+
+<h1>Sign Up</h1>
+
 <?php 
 
 include('config.inc');
 
-$first_name=$_POST['first_name'];
-$last_name=$_POST['last_name'];
+$username=$_POST['username'];
+$password=$_POST['password'];
 $email=$_POST['email'];
 
-	$check = mysql_query("SELECT * FROM Parent WHERE pemail = '" . $email . "'");
-	if (mysql_num_rows($check) >= 1) {
-		echo "Account already exists.";
+	$check = mysql_query("SELECT * FROM users WHERE username = '" . $username . "' OR email = '" . $email . "'");
+	if (mysql_num_rows($check) != 0) {
+		echo "Account with the username or email already exists.<br \><br \><a href='signup.php'>Back</a><br \>";
 	} else {
-		mysql_query ("INSERT INTO Parent (pemail,fname,lname) VALUES ('$email','$first_name','$last_name')");
-		echo "Sign-up successful. <br>Your username is: <strong>$email</strong>";
+		mysql_query ("INSERT INTO users (username,password,email) VALUES ('$username','$password','$email')");
+		echo "Successfully signed up with username " . $username . "!<br \><br \><a href='login.php'>Login</a>";
 	}
 ?>
-</body>
-</html>
+
+<?php include("footer.php"); ?>

@@ -19,6 +19,7 @@ section {
 	border: 1px solid #000;
 	margin: auto;
 	padding: 20px;
+	margin-bottom: 70px;
 }
 body {
 	font-family: Verdana, Geneva, sans-serif;
@@ -30,9 +31,23 @@ select, input {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 10px;
 	margin-left: 17px; 
+	margin-bottom: 10px;
 	border: solid 1px #000;
 	position: relative;
 	top: 4px;
+	padding: 5px;
+}
+textarea {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	margin-left: 17px; 
+	margin-bottom: 10px;
+	border: solid 1px #000;
+	position: relative;
+	top: 4px;
+	padding: 5px;
+	resize:vertical;
+
 }
 .result {
 	border:none;

@@ -42,28 +42,96 @@ select, input {
 	position: relative;
 	top: 4px;
 }
-
-input :
 </style>
 
 </head>
 <?php 
 
 $webid = $_SERVER['QUERY_STRING'];;
+$error = "";
 
 $query = sprintf("SELECT * FROM `questions` NATURAL JOIN `surveys` WHERE webid = '" . $webid . "' ORDER BY number ASC;");
-
 $result = mysql_query($query);
-
 $row = mysql_fetch_array($result);
 
  ?>
 <body>
 <header><?php echo $row['name']; ?></header>
 <section>
+
+<?php
+echo "<p>" . $row['description'] . "</p>";
+
+
+
+$webid = $_SERVER['QUERY_STRING'];
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	// Get SID
+	
+	$result = mysql_query("SELECT * FROM surveys WHERE webid = '$webid'");
+	$row = mysql_fetch_assoc($result);
+	$sid = $row['sid'];
+	$ip = substr(uniqid(),8); //$_SERVER['REMOTE_ADDR'];
+
+
+	// Check Already Completed
+	$qnum = 1;
+	$result = mysql_query("SELECT * FROM participants WHERE sid = $sid AND ip = '$ip'");
+	if (mysql_num_rows($result) != 0) {	
+		$error = "You have already participated in this survey.";
+	} else {
+		// Create New Participant
+		$date = date("Y-m-d H:i:s");
+		mysql_query ("INSERT INTO participants (sid, ip, date) VALUES ($sid, '$ip', '$date')");
+		
+		// Get number of questions
+		$result = mysql_query("SELECT * FROM `questions` WHERE sid = $sid ORDER BY number DESC");
+		$row = mysql_fetch_assoc($result);
+		$qtotal = $row['number'];
+
+		// Get PID
+		$result = mysql_query("SELECT * FROM participants WHERE sid = $sid AND ip = '$ip'");
+		$row = mysql_fetch_assoc($result);
+		$pid = $row['pid'];
+
+		// Send Answer
+		foreach ($_POST as $key => $value) {
+			echo $key . ' : ' . $value . '<br />';
+    		insert($value, $qnum, $sid, $pid);
+    		$qnum++;
+		}
+
+		// -1 for the submit button input, -1 for the final ++
+		$qnum = $qnum - 2;
+
+		if ($qnum != $qtotal) {
+	    		// Delete Participant
+	    		$sql = "DELETE FROM `participants` WHERE pid = $pid;";
+				if (!mysql_query($sql))	{die('Error: ' . mysql_error());}
+				$error = "All fields must be complete.";
+			}
+	}
+
+}
+
+// Create Answer
+function insert($answer, $qnum, $sid, $pid)
+{
+	// Get QID
+	$result = mysql_query("SELECT * FROM questions WHERE sid = $sid AND number = $qnum");
+	$row = mysql_fetch_assoc($result);
+	$qid = $row['qid'];
+    $answer = trim($answer);
+    $answer = stripslashes($answer);
+    $answer = htmlspecialchars($answer);
+
+    mysql_query ("INSERT INTO answers (pid, qid, answer) VALUES ($pid, $qid, '$answer')");
+}
+?>
+
 <?php
 
-echo "<p>" . $row['description'] . "</p>";
 
 mysql_free_result($result);
 
@@ -80,47 +148,47 @@ if (!$result) {
 
 $fields_num = mysql_num_fields($result);
 
+echo 	"<p>" . $error . "</p><form method='post' action='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "?$webid" . "'> ";
 
 while($row = mysql_fetch_array($result))
 {
 	echo "<p>" . $row['number'] . ". " . $row['question'] . "</p>";
 	$type = $row['qtype'];
-	
+	$qname = $row['number']; 
+
 	if ($type == "tf") {
-		echo "	<input type='radio' name='tf' value='true' id='true'> <label for='true'>True</label>
-				<input type='radio' name='tf' value='false' id='false'> <label for='false'>False</label>";
+		echo "	<input type='radio' name='$qname' value='true' id='true'> <label for='true'>True</label>
+				<input type='radio' name='$qname' value='false' id='false'> <label for='false'>False</label>";
 	} else if ($type == "age") {
-		echo "<select name='age' id='age'>";
+		echo "<select name='$qname' id='age'>";
 		for($i = 13; $i <= 99; $i += 1){
      		echo("<option value='{$i}'>{$i}</option>");
 		}	
 		echo "</select>";
 	} else if ($type == "sex") {
-		echo "	<input type='radio' name='sex' value='male' id='male'><label for='male'>Male</label><br />
-				<input type='radio' name='sex' value='female' id='female'><label for='female'>Female</label>";
+		echo "	<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="male") {echo "checked ";} echo "value='male' id='male'><label for='male'>Male</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="female") {echo "checked ";} echo "value='female' id='female'><label for='female'>Female</label>";
 	} else if ($type == "scale") {
-		echo "	<input type='radio' name='scale' value='1' id='1'> <label for='1'>1</label>
-				<input type='radio' name='scale' value='2' id='2'> <label for='2'>2</label>
-				<input type='radio' name='scale' value='3' id='3'> <label for='3'>3</label>
-				<input type='radio' name='scale' value='4' id='4'> <label for='4'>4</label>
-				<input type='radio' name='scale' value='5' id='5'> <label for='5'>5</label>";
+		echo "	<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="1") {echo "checked ";} echo "value='1' id='1'> <label for='1'>1</label>
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="2") {echo "checked ";} echo "value='2' id='2'> <label for='2'>2</label>
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="3") {echo "checked ";} echo "value='3' id='3'> <label for='3'>3</label>
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="4") {echo "checked ";} echo "value='4' id='4'> <label for='4'>4</label>
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="5") {echo "checked ";} echo "value='5' id='5'> <label for='5'>5</label>";
 	} else if ($type == "yn") {
-		echo "	<input type='radio' name='yn' value='yes' id='yes'> <label for='yes'>Yes</label>
-				<input type='radio' name='yn' value='no' id='no'> <label for='no'>No</label>";
+		echo "	<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="yes") {echo "checked ";} echo "value='yes' id='yes'> <label for='yes'>Yes</label>
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="no") {echo "checked ";} echo "value='no' id='no'> <label for='no'>No</label>";
 	} else if ($type == "opinion") {
-		echo "	<input type='radio' name='opinion' value='sagree' id='sagree'> <label for='sagree'>Strongly Agree</label><br />
-				<input type='radio' name='opinion' value='agree' id='agree'> <label for='agree'>Agree</label><br />
-				<input type='radio' name='opinion' value='neutral' id='neutral'> <label for='neutral'>Neutral</label><br />
-				<input type='radio' name='opinion' value='disagree' id='disagree'> <label for='disagree'>Disagree</label><br />
-				<input type='radio' name='opinion' value='sdisagree' id='sdisagree'> <label for='sdisagree'>Strongly Disagree</label><br />
-";
+		echo "	<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="sagree") {echo "checked ";} echo "value='sagree' id='sagree'> <label for='sagree'>Strongly Agree</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="agree") {echo "checked ";} echo "value='agree' id='agree'> <label for='agree'>Agree</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="neutral") {echo "checked ";} echo "value='neutral' id='neutral'> <label for='neutral'>Neutral</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="disagree") {echo "checked ";} echo "value='disagree' id='disagree'> <label for='disagree'>Disagree</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="sdisagree") {echo "checked ";} echo "value='sdisagree' id='sdisagree'> <label for='sdisagree'>Strongly Disagree</label><br />";
 	} else if ($type == "often") {
-		echo "	<input type='radio' name='often' value='sagree' id='sagree'> <label for='sagree'>Always</label><br />
-				<input type='radio' name='often' value='agree' id='agree'> <label for='agree'>Often</label><br />
-				<input type='radio' name='often' value='neutral' id='neutral'> <label for='neutral'>Neutral</label><br />
-				<input type='radio' name='often' value='disagree' id='disagree'> <label for='disagree'>Rarely</label><br />
-				<input type='radio' name='often' value='sdisagree' id='sdisagree'> <label for='sdisagree'>Never</label><br />
-";
+		echo "	<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="always") {echo "checked ";} echo "value='always' id='always'> <label for='always'>Always</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="often") {echo "checked ";} echo "value='often' id='often'> <label for='often'>Often</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="sometimes") {echo "checked ";} echo "value='sometimes' id='sometimes'> <label for='sometimes'>Sometimes</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="rarely") {echo "checked ";} echo "value='rarely' id='rarely'> <label for='rarely'>Rarely</label><br />
+				<input type='radio' name='$qname' "; if (isset($_POST[$qname]) && $_POST[$qname]=="never") {echo "checked ";} echo "value='never' id='never'> <label for='never'>Never</label><br />";
 	}
 	
 }
@@ -129,47 +197,8 @@ mysql_free_result($result);
 
 ?>
 
-<!--
-
-<form>
-<p>1. What is your age?</p>
-<select name="age" id="age">
-<?php
-for($i = 18; $i <= 80; $i += 1){
-     echo("<option value='{$i}'>{$i}</option>");
-}		
-?>
-</select>
-
-
-<p>2. What is your gender?</p>
-<input type='radio' name='sex' value='male' id='male'><label for='male'>Male</label><br />
-<input type='radio' name='sex' value='female' id='female'><label for='female'>Female</label>
-
-<p>3. On a scale of 1 to 5, how is the weather?</p>
-<input type='radio' name='grade' value='1' id='1'> <label for='1'>1</label>
-<input type='radio' name='grade' value='2' id='2'> <label for='2'>2</label>
-<input type='radio' name='grade' value='3' id='3'> <label for='3'>3</label>
-<input type='radio' name='grade' value='4' id='4'> <label for='4'>4</label>
-<input type='radio' name='grade' value='5' id='5'> <label for='5'>5</label>
-
-<p>4. You are a goose.</p>
-<input type='radio' name='tf' value='true' id='true'> <label for='true'>True</label>
-<input type='radio' name='tf' value='false' id='false'> <label for='false'>False</label>
-
-<p>5. Do you like cats?</p>
-<input type='radio' name='yn' value='yes' id='yes'> <label for='yes'>Yes</label>
-<input type='radio' name='yn' value='no' id='no'> <label for='no'>No</label>
-
-<p>6. Pancakes are Delicious. </p>
-<input type='radio' name='agrdis' value='sagree' id='sagree'> <label for='sagree'>Strongly Agree</label><br />
-<input type='radio' name='agrdis' value='agree' id='agree'> <label for='agree'>Agree</label><br />
-<input type='radio' name='agrdis' value='neutral' id='neutral'> <label for='neutral'>Neutral</label><br />
-<input type='radio' name='agrdis' value='disagree' id='disagree'> <label for='disagree'>Disagree</label><br />
-<input type='radio' name='agrdis' value='sdisagree' id='sdisagree'> <label for='sdisagree'>Strongly Disagree</label><br />
--->
 <br /><br />
-<input type='button' style='margin-left: 170px; padding: 5px;' value='Submit'/>
+<input type='submit' name='submit' style='margin-left: 170px; padding: 5px;' value='Submit'/>
 <br />
 </form>
 

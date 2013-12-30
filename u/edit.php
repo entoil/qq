@@ -124,7 +124,7 @@ function s4() {
 
     if (mysql_num_rows($result) < 1) {
             echo "Questionnaire does not exist.";
-    } else {   		
+    } else {
     		$row = mysql_fetch_assoc($result);
 			echo "<span id='errorbox'></span>";
             echo "<form name=newqq action=edit_submit.php?$webid method=post onsubmit='return validateForm()'>
@@ -132,17 +132,32 @@ function s4() {
                     <tr><td width='80px'>Name:</td> <td width=250px><input size=45 type=text name=name value='" . $row['name'] . "'/></td></tr>
                     <tr><td>Description:</td> <td><textarea cols=45 name='description'/>" . $row['description'] . "</textarea></td></tr>
 		            </table>
-		            <br \>
-		            <input type=\"checkbox\" name=\"age\" name=\"age\">Ask for Age 
-					<input type=\"checkbox\" name=\"sex\" name=\"sex\">Ask for Gender<br \><br \>
-		            <table id='questiontable'>";
+		            <br \>";
+
+		    $query = "SELECT * FROM questions NATURAL JOIN surveys NATURAL JOIN users WHERE webid = '$webid' AND qtype = 'age'";
+    		$result = mysql_query($query);
+    		if (mysql_num_rows($result) == 0) {	
+    			echo "<input type=\"checkbox\" name=\"age\" name=\"age\">Ask for Age";
+    		} else {
+    			echo "<input type=\"checkbox\" name=\"age\" checked name=\"age\">Ask for Age";
+    		}
+
+    		 $query = "SELECT * FROM questions NATURAL JOIN surveys NATURAL JOIN users WHERE webid = '$webid' AND qtype = 'sex'";
+    		$result = mysql_query($query);
+    		if (mysql_num_rows($result) == 0) {	
+    			echo "<input type=\"checkbox\" name=\"sex\" name=\"sex\">Ask for Gender";
+    		} else {
+    			echo "<input type=\"checkbox\" name=\"sex\" checked name=\"sex\">Ask for Gender";
+    		}
+		    
+		  	echo "<table id='questiontable'>";
 
 			$query = "SELECT * FROM questions NATURAL JOIN surveys NATURAL JOIN users WHERE webid = '$webid'";
     		$result = mysql_query($query);
 
 		    while($row = mysql_fetch_assoc($result)) {
 
-		    		if ($row['qtype'] != "age" || $row['qtype'] != "sex") {
+		    		if ($row['qtype'] != "age" && $row['qtype'] != "sex") {
 			    		$qname = substr(uniqid(),4); 
 			            echo "
 			            

@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	$result = mysql_query("SELECT * FROM surveys WHERE webid = '$webid'");
 	$row = mysql_fetch_assoc($result);
 	$sid = $row['sid'];
-	$ip = substr(uniqid(),8); //$_SERVER['REMOTE_ADDR'];
-
+	//$ip = substr(uniqid(),8); 
+	$ip = $_SERVER['REMOTE_ADDR'];
 
 	// Check Already Completed
 	$qnum = 1;
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
 		// Send Answer
 		foreach ($_POST as $key => $value) {
-			echo $key . ' : ' . $value . '<br />';
+			//echo $key . ' : ' . $value . '<br />';
     		insert($value, $qnum, $sid, $pid);
     		$qnum++;
 		}
@@ -110,7 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	    		$sql = "DELETE FROM `participants` WHERE pid = $pid;";
 				if (!mysql_query($sql))	{die('Error: ' . mysql_error());}
 				$error = "All fields must be complete.";
-			}
+		} else {
+			header("Location: success.php");
+		}
 	}
 
 }

@@ -143,7 +143,7 @@ function s4() {
 			}
 			echo "</table><center><a onclick=\"jsfunction\" href=\"javascript:newq();\">+ Add Question</a></center>";
 			echo "<br \><br \>       
-            <input type=submit value=Create><a href='..' style='margin-left: 17px;'><input type=button value=Cancel></a>
+            <input type=submit value=Create style='margin-left:0'><a href='..' style='margin-left: 17px;'><input type=button value=Cancel style='margin-left:0'></a>
             </form>";
     
 		

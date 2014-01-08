@@ -24,7 +24,7 @@ if (isset($_SESSION['username'])) {	header('Location: /u'); }
     </table>
     <br />
    	<table>
-    <tr><td><input type="submit" value="Sign Up"></td></tr>
+    <tr><td><input type="submit" value="Sign Up" style="margin-left:0"></td></tr>
     </table>
 </form><br><br>
 

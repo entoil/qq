@@ -14,25 +14,36 @@ header {
 	letter-spacing: 2px;
 	height: 60px;
 	width: 450px;
-	border: 1px solid #000;
+	border: 1px solid #999;
 	padding-top: 40px;
 	font-size: 14px;
 	margin: auto;
 	margin-bottom: 5px;
 	margin-top: 80px;
+		background-color: #CCC;
+	background-image: url(../images/hbg.png);
+		-moz-box-shadow: 5px 5px 0 5px #BBB;
+	-webkit-box-shadow: 5px 5px 0 5px#BBB;
+	box-shadow: 2px 2px 0 0px #BBB;
 }
 section {
 	min-height: 400px;
 	width: 410px;
-	border: 1px solid #000;
+	border: 1px solid #999;
 	margin: auto;
 	padding: 20px;
+		background-color: #FFF;
+		-moz-box-shadow: 5px 5px 0 5px #BBB;
+	-webkit-box-shadow: 5px 5px 0 5px#BBB;
+	box-shadow: 2px 2px 0 0px #BBB;
 }
 body {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 10px;
 	line-height: 20px;
 	letter-spacing: 1px;
+	background-image: url(../images/bg.png);
+	margin-bottom: 100px;
 }
 select, input { 
 	font-family: Verdana, Geneva, sans-serif;
@@ -201,7 +212,7 @@ mysql_free_result($result);
 
 <br /><br />
 <input type='submit' name='submit' style='margin-left: 170px; padding: 5px;' value='Submit'/>
-<br />
+<br /><br />
 </form>
 
 </section>

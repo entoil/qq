@@ -20,11 +20,10 @@ if (isset($_SESSION['username'])) {	header('Location: /u'); }
     </table>
     <br />
    	<table>
-    <tr><td><input type="submit" value="Log In"></td>
-    <td><input type="submit" value="Sign Up"> </td></tr>
+    <tr><td><input type="submit" style="margin-left:0" value="Log In"></td>
     </table>
-</form><br><br>
+</form>
 
-<p><a href="signup.php">Sign Up</a></p>
+<p><a href="signup.php" >Sign Up</a></p>
 
 <?php include("footer.php"); ?>
